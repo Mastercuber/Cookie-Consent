@@ -1,0 +1,10 @@
+.row {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    background: white;
+}
+.col {
+    flex: 1 0 auto;
+}

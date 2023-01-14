@@ -1,0 +1,81 @@
+{
+  "name": "@avensio/cookie-consent",
+  "version": "0.3.5",
+  "private": false,
+  "scripts": {
+    "dev": "vite",
+    "dev:docs": "vitepress dev docs",
+    "test": "vitest --coverage --run --globals --silent",
+    "lint": "eslint . --fix",
+    "build:docs": "vitepress build docs",
+    "build": "vite build",
+    "build:lib": "vite build -c vite.config.lib.ts",
+    "serve": "vite preview",
+    "browserslist:update": "npx browserslist@latest --update-db",
+    "browserslist:show:selected": "npx browserslist",
+    "dependencies:update": "npm-check -u"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "vue",
+    "cookie",
+    "consent",
+    "privacy",
+    "manager"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mastercuber/cookie-consent.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mastercuber/cookie-consent/issues"
+  },
+  "homepage": "https://mastercuber.github.io/Cookie-Consent/",
+  "main": "./dist/cookie-consent.cjs.js",
+  "module": "./dist/cookie-consent.es.js",
+  "types": "./dist/components/CookieConsent.vue.d.ts",
+  "exports": {
+    "./style.css": "./dist/style.css",
+    ".": {
+      "import": "./dist/cookie-consent.es.js",
+      "require": "./dist/cookie-consent.cjs.js"
+    }
+  },
+  "publishConfig": {
+    "registry": "https://repo.avensio.de/repository/npm-registry/"
+  },
+  "browserslist": [
+    "last 6 versions"
+  ],
+  "dependencies": {
+    "vue": "^3.2.39",
+    "vue-i18n": "^9.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.18",
+    "@typescript-eslint/parser": "^5.37.0",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitest/coverage-c8": "^0.26.0",
+    "@vitest/ui": "^0.26.0",
+    "@vue/test-utils": "^2.0.2",
+    "autoprefixer": "^10.4.13",
+    "browserslist": "^4.21.4",
+    "eslint": "^8.23.1",
+    "eslint-plugin-vue": "^9.5.1",
+    "happy-dom": "^8.1.0",
+    "pathe": "^1.0.0",
+    "postcss": "^8.4.14",
+    "postcss-nesting": "^10.2.0",
+    "tailwindcss": "^3.1.8",
+    "typescript": "^4.9.4",
+    "vite": "^4.0.2",
+    "vite-plugin-dts": "^1.5.0",
+    "vite-plugin-vue-type-imports": "^0.2.4",
+    "vitepress": "^1.0.0-alpha.15",
+    "vitest": "^0.26.0",
+    "vue-tsc": "^1.0.14"
+  }
+}

@@ -1,0 +1,73 @@
+/* Checkbox styling */
+input[type="checkbox"] {
+    appearance: none;
+    position: relative;
+    height: 20px;
+    width: 20px;
+    color: green;
+    user-select: none;
+    outline: none;
+    border: 1px solid gray;
+    box-sizing: border-box;
+}
+input[type="checkbox"]:checked::before {
+    /* Use `visibility` instead of `display` to avoid recalculating layout */
+    visibility: visible;
+}
+input[type="checkbox"]::before {
+    content: "\2713"; /* ✓ -> Unicode Zeichen */
+    font-size: 24px;
+    visibility: hidden;
+    color: green;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scaleX(1.1);
+}
+
+.checkbox-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.checkbox-partial-indicator {
+    position: absolute;
+    background: dodgerblue;
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
+}
+.checkbox-none-indicator {
+    position: absolute;
+    background: gray;
+    width: 12px;
+    height: 4px;
+    pointer-events: none;
+}
+
+input[type=checkbox]:focus {
+    border: 1px solid orange;
+    border-radius: 4px;
+}
+
+input[type="checkbox"]:disabled {
+    background: #ddd;
+    color: green;
+}
+
+.cookie-consent-checkbox-accept {
+    margin-top: 6px;
+}
+
+input[type=checkbox]:hover, label:hover {
+    cursor: pointer;
+}
+
+#container[dir=rtl] #details-container > header {
+    text-align: initial;
+}
+#container[dir=rtl] #details-container > header > .heading {
+    margin-inline-start: 65px;
+}

@@ -1,0 +1,21 @@
+*:focus {
+    background: red !important;
+}
+*:focus-within {
+    background: darkred;
+}
+*:focus-visible {
+    background: palevioletred;
+}
+/**:hover {
+    background: blue !important;
+}*/
+/**:active {
+    background: green !important;
+}*/
+*:checked {
+    background: yellow !important;
+}
+*:enabled {
+    background: green !important;
+}

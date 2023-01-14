@@ -1,0 +1,162 @@
+@keyframes transform-to-details {
+    50% {
+        width: var(--cookie-consent-width);
+        height: 0;
+        margin: 50vh auto;
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
+    }
+    60% {
+        width: var(--cookie-consent-details-width);
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
+    }
+    100% {
+        width: var(--cookie-consent-details-width);
+        height: var(--cookie-consent-details-height);
+        transform: translateZ(0);
+        margin: 25vh auto;
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
+    }
+}
+
+@keyframes transform-to-main {
+    0% {
+        width: var(--cookie-consent-details-width);
+        height: var(--cookie-consent-details-height);
+        margin: 25vh auto;
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
+    }
+    50% {
+        width: var(--cookie-consent-details-width);
+        height: 0;
+        margin: 50vh auto;
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
+    }
+    60% {
+        width: var(--cookie-consent-width);
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
+    }
+    100% {
+        width: var(--cookie-consent-width);
+        height: var(--cookie-consent-height);
+        margin: 25vh auto;
+        transform: translateZ(0);
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
+    }
+}
+
+@keyframes transform-opacity-to-details {
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes transform-opacity-to-main {
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes hide-consent {
+    from {
+        width: var(--transform-current-width);
+        height: var(--transform-current-height);
+        overflow: hidden;
+        transform: translateZ(0px);
+    }
+    20% {
+        opacity: 1;
+        transform: rotateX(-15deg) translateZ(100px);
+        overflow: hidden;
+    }
+    to {
+        width: var(--transform-current-width) !important;
+        height: var(--transform-current-height) !important;
+        opacity: 0;
+        transform: rotateX(90deg) translateZ(150px);
+        overflow: hidden;
+    }
+}
+
+@keyframes minimize {
+    from {
+        width: var(--transform-current-width);
+        height: var(--transform-current-height);
+        transform: translateX(0) translateY(0) translateZ(0); /* translateZ(0) ist nur zum Aktivieren der Hardwarebeschleunigung da */
+        overflow-y: auto;
+        overflow-x: hidden;
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
+    }
+    1% {
+        overflow: hidden;
+    }
+    to {
+        width: 50px;
+        height: 50px;
+        transform: translateX(var(--transform-minimize-x)) translateY(var(--transform-minimize-y)) translateZ(0); /* translateZ(0) ist nur zum Aktivieren der Hardwarebeschleunigung da */
+        opacity: 0;
+        overflow: hidden;
+        backface-visibility: hidden; /* HW-Beschleunigung zum Flackern verhindern */
+        perspective: 1000px; /* HW-Beschleunigung zum Flackern verhindern */
+    }
+}
+
+@keyframes blur-overlay {
+    to {
+        background: rgba(51, 51, 51, 0);
+    }
+}
+
+.blur-overlay-reverse {
+    animation: blur-overlay var(--cookie-consent-minimize-animation-duration) reverse;
+}
+
+.blur-overlay {
+    animation: blur-overlay var(--cookie-consent-minimize-animation-duration);
+}
+
+.maximize {
+    animation: minimize var(--cookie-consent-minimize-animation-duration) reverse forwards;
+}
+
+.minimize {
+    animation: minimize var(--cookie-consent-minimize-animation-duration) forwards;
+}
+
+.transform-to-details {
+    animation: transform-to-details var(--cookie-consent-animation-duration) forwards;
+}
+
+.transform-to-main {
+    animation: transform-to-main var(--cookie-consent-animation-duration) forwards;
+}
+
+.transform-opacity-to-details {
+    animation: transform-opacity-to-details var(--cookie-consent-animation-duration) forwards;
+}
+
+.transform-opacity-to-main {
+    animation: transform-opacity-to-main var(--cookie-consent-animation-duration) forwards;
+}
+
+.hide-consent {
+    animation: hide-consent var(--cookie-consent-hide-duration);
+}

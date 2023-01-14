@@ -1,0 +1,37 @@
+table:not(:last-child) {
+    border-bottom: 2px solid darkgray;
+}
+table {
+    width: calc(100% - 3px);
+    margin: 3px;
+}
+
+table tr, table tr:hover {
+    background: white;
+    cursor: default;
+}
+
+table tr td:first-child {
+    user-select: none;
+}
+
+table td {
+    border: 1px solid lightgrey;
+    cursor: default;
+    padding: 3px 3px 3px 8px;
+}
+
+table td:first-child {
+    width: 35%;
+    font-weight: bold;
+}
+
+table td a:not(:last-child)::after {
+    content: ' | ';
+    font-weight: bold;
+}
+
+.table-binary-slider-container > div, .table-binary-slider-container > span {
+    display: inline-block;
+    vertical-align: middle;
+}

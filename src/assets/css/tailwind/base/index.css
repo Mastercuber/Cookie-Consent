@@ -1,0 +1,14 @@
+@import "controls/button.css";
+@import "inputs/checkbox.css";
+
+@layer base {
+    a {
+        transition: 0.4s;
+        color: dodgerblue;
+    }
+    a:hover {
+        color: orange;
+        transition: 0.4s;
+        text-shadow: 0 0 1px orange;
+    }
+}

@@ -1,0 +1,38 @@
+@layer components {
+    .binary-slider {
+        @apply
+            relative
+            rounded-[14px]
+            bg-gray-300
+            w-[51px] h-[30px]
+            cursor-pointer
+            z-[1];
+
+        &.partial {
+             background: rgba(15, 164, 203, 0.8);
+
+            .binary-slider-circle {
+                left: 15px;
+            }
+        }
+        &.active {
+             background: #2bcb40;
+
+            .binary-slider-circle {
+                left: 26px;
+            }
+        }
+
+        .binary-slider-circle {
+            position: absolute;
+            width: 21px;
+            height: 21px;
+            border-radius: 50%;
+            background: floralwhite;
+            top: 4px;
+            left: 4px;
+            pointer-events: none;
+            transition: 0.2s;
+        }
+    }
+}

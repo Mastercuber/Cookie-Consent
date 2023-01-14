@@ -1,0 +1,17 @@
+:root {
+    --cookie-consent-animation-duration: 1s;
+    --cookie-consent-minimize-animation-duration: 1s;
+    --cookie-consent-hide-duration: 1s;
+    --cookie-consent-width: 350px;
+    --cookie-consent-height: 450px;
+    --cookie-consent-details-width: 600px;
+    --cookie-consent-details-height: 450px;
+    --cookie-consent-settings-color: green;
+    --cookie-consent-minimizer-hover-color: dodgerblue;
+}
+
+@media all and (max-width: 600px) {
+    :root {
+        --cookie-consent-details-width: 350px;
+    }
+}

@@ -1,0 +1,11 @@
+@media all and (max-width: 800px) and (max-height: 400px) {
+    #container {
+        margin: 0 auto !important;
+        width: calc(var(--cookie-consent-height) + 100px) !important;
+        height: 100vh !important;
+    }
+    button {
+        width: 40% !important;
+        margin-left: 4px !important;
+    }
+}

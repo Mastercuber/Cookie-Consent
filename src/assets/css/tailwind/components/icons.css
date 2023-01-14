@@ -1,0 +1,63 @@
+@layer components {
+    .settings-icon-container {
+        @apply
+            w-[50px] h-[50px]
+            cursor-pointer
+            text-white
+            bg-blue-500
+            opacity-50 hover:opacity-100 transition-opacity duration-700
+            rounded-[5px]
+            fixed
+            right-[20px] bottom-[10px]
+            select-none;
+
+        .settings-icon {
+            @apply w-full h-full block;
+            &::before {
+                 @apply w-full h-full block;
+                 content: '\2699'; /* HTML Entity -> &#9881; */
+                 font-size: 36px;
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
+            }
+        }
+    }
+
+    .arrow-up {
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+
+        border-bottom: 5px solid #bfdbfe;
+    }
+
+    .cookie-consent-info:hover {
+        box-shadow: 0 0 6px var(--cookie-consent-minimizer-hover-color);
+    }
+    .cookie-consent-info {
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: white;
+        cursor: pointer;
+        background: #3b82f6;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        user-select: none;
+        opacity: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+    }
+    .cookie-consent-info-hide {
+        opacity: 0;
+    }
+
+    .cookie-consent-info ~ div > p {
+        white-space: pre-line;
+    }
+}

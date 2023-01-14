@@ -1,0 +1,20 @@
+@layer base {
+    button {
+        width: auto;
+        color: white;
+        background: royalblue;
+        font-weight: bold;
+        border-radius: 6px;
+        transition: var(--cookie-consent-transition-duration);
+        margin: 6px 0;
+        padding: 10px;
+        cursor: pointer;
+        border: none;
+    }
+    button:hover {
+        color: white;
+        background: #1B37E1;
+        opacity: 1;
+        box-shadow: 0 0 20px #1B37E1;
+    }
+}

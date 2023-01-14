@@ -1,0 +1,56 @@
+.minimizer, .clear-site {
+    position: absolute;
+    display: flex;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    background: #E7ECFA;
+    border: 1px solid #47494E;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    top: 8px;
+    right: 8px;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 1;
+}
+.clear-site {
+    margin-right: 40px;
+}
+.minimizer::before {
+    content: '\2010';
+    position: absolute;
+    top: 0;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+    transition: color 0.5s;
+}
+.clear-site::before {
+    content: '\D7';
+    position: absolute;
+    top: -1px;
+    font-size: 1em;
+    color: darkred;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+    transition: color 0.5s;
+}
+.clear-site:hover:before {
+    color: crimson;
+}
+.minimizer:hover:before {
+    color: orange;
+}
+
+.minimizer:hover, .clear-site:hover {
+    box-shadow: 0 0 6px var(--cookie-consent-minimizer-hover-color);
+}
+
+.minimizer span {
+    color: gray;
+    transform: scaleX(0)
+}

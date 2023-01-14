@@ -1,0 +1,12 @@
+a {
+    text-decoration: none;
+    transition: 0.4s;
+}
+a:hover {
+    color: orange;
+    transition: 0.4s;
+    text-shadow: 0 0 1px orange;
+}
+#link-container > div > a:hover {
+    box-shadow: 0 0 10px green;
+}
