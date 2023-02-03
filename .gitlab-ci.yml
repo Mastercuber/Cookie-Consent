@@ -20,6 +20,12 @@ stages:          # List of stages for jobs, and their order of execution
   - test
   - deploy
 
+cache:
+  key: cookie-consent-node_modules
+  when: always
+  paths:
+    - node_modules
+
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   artifacts:
@@ -33,23 +39,25 @@ build-job:       # This job runs in the build stage, which runs first.
 lint-test-job:   # This job runs in the test stage.
   stage: test    # It can run at the same time as unit-test-job (in parallel).
   script:
-    - npm config set registry https://repo.avensio.de/repository/npm-public/
-    - npm install --force
     - npm run lint
+  needs:
+    - job: build-job
+      artifacts: false
 
 unit-test-job:   # This job also runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
   script:
-    - npm config set registry https://repo.avensio.de/repository/npm-public/
-    - npm install --force
     - npm test
+  needs:
+    - job: build-job
+      artifacts: false
 
 deploy-job:      # This job runs in the deployment stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
-    - npm config set registry https://repo.avensio.de/repository/npm-public/
-    - npm install --force
     - npm config set registry https://repo.avensio.de/repository/npm-hosted/
     - npm config set //repo.avensio.de/repository/npm-hosted/:_auth $NPM_AUTH
-    - npm run build:lib
     - npm publish
+  needs:
+    - job: build-job
+      artifacts: true

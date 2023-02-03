@@ -46,7 +46,7 @@
     }
   },
   "publishConfig": {
-    "registry": "https://repo.avensio.de/repository/npm-registry/"
+    "registry": "https://repo.avensio.de/repository/npm-hosted/"
   },
   "browserslist": [
     "last 6 versions"
