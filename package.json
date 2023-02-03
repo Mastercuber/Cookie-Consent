@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite",
     "dev:docs": "vitepress dev docs",
-    "test": "vitest --coverage --run --globals --silent src/components",
+    "test": "vitest --coverage --globals --silent src/components",
+    "test:ci": "vitest --coverage --reporter 'junit' --outputFile JUnit.xml --run --globals --silent src/components",
     "lint": "eslint . --fix",
     "build:docs": "vitepress build docs",
     "build": "vite build",
