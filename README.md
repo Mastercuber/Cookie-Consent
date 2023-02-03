@@ -1,7 +1,7 @@
 # Cookie Consent
 This is an internationalized ([vue-i18n](https://vue-i18n.intlify.dev/)) Cookie Consent component for [vue 3](https://vuejs.org/).
 
-The first category must be the `essentials` category. Only Cookies in this first category are accepted per default and can't be declined.
+The first category must be the `essentials` category. Only Cookies in this first category are accepted per default and can't be declined. Also, no handlers (`onAccepted`, `onDenied`) are called for cookies of this category.
 
 All Cookies of other categories are declined per default.
 
@@ -21,18 +21,18 @@ const i18n = createI18n({
 ## Global Consents Object
 Before the component gets mounted to the DOM, a global `Consents` object is attached to the `window` object and, therefore, can be globally accessed.
 
+For the object to get attached to the `window` object the [component property](#component-properties) `attachGlobal` **must** be set to `true`!
+
 ### Properties
 * `Consents.hasAccepted`: has consent already been given?
 * `Consents.ids`: an array of objects with 2 keys each (`categoryId` and `cookieId`)
-* `Consents.storagePrefix`: with this property it's possible to change the prefix used for storing the individuell consents  
-(default: `consent`) 
-* `Consents.storageConsentsKey`: with this property the storage key of all consents can be customized  
-(default: `consents`) (Cookie name and `localStorage` key)
+* `Consents.storagePrefix`: the storage prefix passed to the component (default: `consent`)
+* `Consents.storageKey`: the storage key passed to the component used as the **cookie name** and **localStorage key** (default: `consents`)
 
 ### Functions
-* `Consents.set(categoryId: number, cookieId: number, value: boolean): void`    
-Set a consent
-* `Consents.get(categoryId: number, cookieId: number): boolean`  
+* `Consents.set(categoryId: string, cookieId: string, value: boolean): boolean`    
+Set a consent (Without saving)
+* `Consents.get(categoryId: string, cookieId: string): boolean`  
 Receive the current consent for a Cookie
 * `Consents.clear()`   
 Remove the Consents from the `localStorage`, delete the Cookie and call all `onDenied()` functions
@@ -44,11 +44,12 @@ interface Props {
     
   links?: Array<Link>;
   useMetaCookie?: boolean; // false
+  attachGlobal?: boolean; // false
   animationDuration?: string; // '1.5s'
   minimizeAnimationDuration?: string; // '1s'
   hideDuration?: string; // '1s'
   storagePrefix?: string; // 'consent'
-  storageConsentsKey?: string; // 'consents'
+  storageKey?: string; // 'consents'
   maskContent?: boolean; // true
   maskColor?: string; // '#47494E'
 }
@@ -59,9 +60,11 @@ To add more links to the bottom of the main component view, you can provide addi
 
 By default, the consent is persisted to the localStorage. To also set a cookie, set `useMetaCookie` to true.
 
+The **global consents object** is not attached per default. Set `attachGlobal` to `true` if you need to use the global object.
+
 `animationDuration`, `minimizeAnimationDuration` and `hideDuration` can be set to change the default animation durations.
 
-With `storagePrefix` and `storageConsentsKey` the keys for persistence can be changed.
+With `storagePrefix` and `storageKey` the keys for persistence can be changed.
 
 By default, the content of the page gets masked when the consent appears. To disable the masking, set `maskContent` to false; to change the mask color, set a color with `maskColor`.
 ## Additional interfaces

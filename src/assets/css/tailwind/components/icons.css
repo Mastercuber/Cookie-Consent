@@ -43,15 +43,18 @@
         color: white;
         cursor: pointer;
         background: #3b82f6;
-        width: 20px;
-        height: 20px;
+        width: 26px;
+        height: 26px;
         border-radius: 50%;
         user-select: none;
         opacity: 1;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 14px;
+        font-size: 16px;
+    }
+    .cookie-consent-info::before {
+        content: '\2139';
     }
     .cookie-consent-info-hide {
         opacity: 0;

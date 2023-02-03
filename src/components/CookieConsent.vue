@@ -25,10 +25,10 @@
                 <span
                     class="cookie-consent-info font-bold"
                     :title="t('generalLabels.info.title')"
-                    @click="toggleInfo(isInfoOpen)"
-                >i</span>
+                    @click="toggleInfo()"
+                ></span>
                 <div
-                    class="rounded w-full h-max bg-blue-200 absolute top-[26px] left-0"
+                    class="rounded w-full h-max bg-blue-200 absolute top-[32px] left-[3px]"
                     :class="{ 'cookie-consent-info-hide': !isInfoOpen }"
                 >
                   <span class="absolute arrow-up top-[-4px] left-[5px]"/>
@@ -54,7 +54,7 @@
                   :title="t('generalLabels.clearSite')"
                   @click="clearSite($event)"
               />
-              <div class="inline-flex h-[45px] mt-4">
+              <div class="inline-flex h-[45px] mt-6">
                 <span class="select-none text-[36px]">&#127850;</span>
                 <h4 class="select-none font-bold mt-[10px]">
                   {{ t('generalLabels.title') }}
@@ -98,13 +98,13 @@
               <div>
                 <button
                     class="btn"
-                    @click="acceptAll(consents)"
+                    @click="acceptAll()"
                 >
                   {{ t('generalLabels.button.acceptAll') }}
                 </button>
                 <button
                     class="btn"
-                    @click="acceptSelection(consents)"
+                    @click="acceptSelection()"
                 >
                   {{ t('generalLabels.button.acceptSelection') }}
                 </button>
@@ -161,7 +161,7 @@
               <a
                   rel="nofollow"
                   href="#"
-                  class="absolute top-[6px] right-10 font-bold"
+                  class="absolute right-10 font-bold pt-[5px] pb-[10px] pl-[16px] pr-[12px]"
                   @click="showMain($event)"
               >{{ t('generalLabels.details.back') }}</a>
               <a
@@ -171,7 +171,7 @@
                   :title="t('generalLabels.minimize')"
                   @click="minimize($event)"
               ><span>-</span></a>
-              <div class="inline-flex h-[45px] mt-4">
+              <div class="inline-flex h-[45px] mt-[20px] rtl:mt-[30px]">
                 <span class="select-none text-[36px]">&#127850;</span>
                 <h4 class="select-none font-bold mt-[10px]">
                   {{ t('generalLabels.title') }}
@@ -384,11 +384,12 @@ const {t, locale} = useI18n({})
 // Props
 const props = withDefaults(defineProps<Props>(), {
   useMetaCookie: false,
+  attachGlobal: false,
   animationDuration: '1.5s',
   minimizeAnimationDuration: '1s',
   hideDuration: '1s',
   storagePrefix: 'consent',
-  storageConsentsKey: 'consents',
+  storageKey: 'consents',
   maskContent: true,
   maskColor: '#47494E'
 })
@@ -396,28 +397,29 @@ const props = withDefaults(defineProps<Props>(), {
 const overlayBackgroundColor = props.maskContent ? props.maskColor : 'transparent'
 
 const {
-  consents,
-  detailsCards,
   toggleConsent,
   toggleInfo,
   toggleCookieInformation,
   getCookieCountForCategory,
   setCategoryConsent,
-  categories,
   acceptAll,
   acceptSelection,
   minimize,
   maximize,
   showMain,
-  links,
   showDetails,
   clearSite,
   isInfoOpen,
   isMainContainerVisible,
   isMinimized,
   showConsent,
-  blurOverlayReverse
+  blurOverlayReverse,
+  links,
+  categories,
+  consents,
+  detailsCards
 } = useCookieConsent(props)
+
 </script>
 
 <style>

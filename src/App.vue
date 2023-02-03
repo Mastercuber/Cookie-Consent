@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative; z-index: 1;">
     <LanguageFlags style="position: absolute; z-index: 2;"/>
-    <CookieConsent ref="cookie-consent" :use-meta-cookie="true" :required-links="obj.requiredLinks" :categories="obj.categories" style="position: absolute; z-index: 1;" />
+    <CookieConsent ref="cookie-consent" :use-meta-cookie="true" :required-links="obj.requiredLinks" :categories="obj.categories" :attach-global="true" style="position: absolute; z-index: 1;" />
   </div>
 </template>
 

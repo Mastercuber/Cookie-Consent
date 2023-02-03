@@ -1,13 +1,13 @@
 export interface Consent {
-    accepted: boolean,
-    partial: boolean,
+    accepted: boolean
+    partial: boolean
     cookies: Array<Cookie>
 }
 export interface Cookie {
-    accepted: boolean,
+    accepted: boolean
 }
 
 export interface Id {
-    categoryId: number,
-    cookieId: number
+    categoryId: string
+    cookieId: string
 }

@@ -3,11 +3,32 @@ import {nextTick, onBeforeMount, onMounted, reactive, ref, unref, watchEffect} f
 import {Consent} from "../interfaces/Consent";
 import Consents from "./Consents";
 import {useI18n} from "vue-i18n";
+import {deleteCookie} from "../assets/cookies.js";
+
+const MINIMIZED_KEY = 'consent-manager-minimized'
+export function clearConsents(props: Props, consents: Array<Consent>) {
+  localStorage.removeItem(props.storageKey!)
+  localStorage.removeItem(MINIMIZED_KEY)
+  deleteCookie(props.storageKey)
+
+  for (let i = 1; i < props.categories.length; i++) {
+    if (props.categories[i].cookies) {
+      for (let j = 0; j < props.categories[i].cookies.length; j++) {
+        if (typeof props.categories[i].cookies[j].onDenied === 'function') props.categories[i].cookies[j].onDenied()
+        if (i > 0) {
+          consents[i].cookies[j].accepted = false
+          consents[i].accepted = false
+          consents[i].partial = false
+        }
+      }
+    }
+  }
+}
 
 export function useCookieConsent(props: Props) {
   const {t, locale, fallbackLocale} = useI18n()
   const i18n = useI18n()
-  // Data
+
   const consents: Array<Consent> = reactive([])
   const isMainContainerVisible = ref(true)
   const isMinimized = ref(false)
@@ -58,8 +79,9 @@ export function useCookieConsent(props: Props) {
     purpose: t('metaCookieTitles.purpose'),
     cookieValidityPeriod: t('metaCookieTitles.cookieValidityPeriod'),
   })
-  // @ts-ignore
-  if (!(props.storageConsentsKey in localStorage)) showConsent.value = true
+
+  if (MINIMIZED_KEY in localStorage) showConsent.value = false
+  else if (!(props.storageKey in localStorage)) showConsent.value = true
 
 
   function getCookieCountForCategory(category: Category) {
@@ -92,8 +114,6 @@ export function useCookieConsent(props: Props) {
       containerWidth = +getComputedStyle(document.documentElement).getPropertyValue('--cookie-consent-details-width').replace('px', '')
     }
     const offsetLeft = window.innerWidth / 2 - containerWidth / 2
-    // Ohne diese Zeile funktioniert im Firefox die Minimierungsanimation nicht mehr immer... Warum auch immer..
-    // Auch nicht wenn der Parameter ganz entfernt wird! -.-
     offsetTop = container.offsetTop || offsetTop
 
     const x = window.innerWidth - offsetLeft - 45 - containerWidth / 2
@@ -114,6 +134,7 @@ export function useCookieConsent(props: Props) {
 
   function maximize(event: Event) {
     event.preventDefault()
+    localStorage.removeItem(MINIMIZED_KEY)
 
     setTransformToWidthAndHeight()
     showConsent.value = true
@@ -135,6 +156,7 @@ export function useCookieConsent(props: Props) {
 
   function minimize(event: Event) {
     event.preventDefault()
+    localStorage.setItem(MINIMIZED_KEY, 'true')
 
     setTransformToWidthAndHeight()
 
@@ -164,6 +186,7 @@ export function useCookieConsent(props: Props) {
 
     const container = <HTMLElement>document.getElementById('container')
     const overlay = <HTMLElement>document.getElementById('overlay')
+    if (!container || !overlay) return
     overlay.classList.remove('blur-overlay-reverse')
 
     setTransformToXY(container)
@@ -226,9 +249,7 @@ export function useCookieConsent(props: Props) {
     for (let i = 1; i < unref(consents).length; i++) {
       for (let j = 0; j < unref(consents)[i].cookies.length; j++) {
         const cookieConsent = unref(consents)[i].cookies[j]
-        // @ts-ignore
         const cookie: Cookie = props.categories[i].cookies[j]
-        // @ts-ignore
         const key = `${props.storagePrefix}-${props.categories[i].id}-${cookie.id}`
 
         if (cookieConsent.accepted) {
@@ -247,7 +268,7 @@ export function useCookieConsent(props: Props) {
       }
     }
 
-    localStorage.setItem(<string>props.storageConsentsKey, JSON.stringify(obj))
+    localStorage.setItem(<string>props.storageKey, JSON.stringify(obj))
 
     if (props.useMetaCookie) setMetaCookie(obj)
   }
@@ -255,7 +276,7 @@ export function useCookieConsent(props: Props) {
   function setMetaCookie(obj: { [key: string]: boolean }) {
     const expireDate = new Date()
     expireDate.setFullYear(expireDate.getFullYear() + 1)
-    document.cookie = `${props.storageConsentsKey}=${JSON.stringify(obj)};samesite=Lax;secure=true;expires=${expireDate}`
+    document.cookie = `${props.storageKey}=${JSON.stringify(obj)};samesite=Lax;secure=true;expires=${expireDate}`
   }
 
   function acceptAll() {
@@ -273,11 +294,8 @@ export function useCookieConsent(props: Props) {
     const obj: { [key: string]: boolean } = {}
 
     for (let i = 1; i < props.categories.length; i++) {
-      // @ts-ignore
       for (let j = 0; j < props.categories[i].cookies.length; j++) {
-        // @ts-ignore
         const cookie = props.categories[i].cookies[j]
-        // @ts-ignore
         const key = `${props.storagePrefix}-${props.categories[i].id}-${cookie.id}`
         obj[key] = true
 
@@ -286,8 +304,9 @@ export function useCookieConsent(props: Props) {
         }
       }
     }
+
     // @ts-ignore
-    localStorage.setItem(props.storageConsentsKey, JSON.stringify(obj))
+    localStorage.setItem(props.storageKey, JSON.stringify(obj))
     if (props.useMetaCookie) setMetaCookie(obj)
   }
 
@@ -307,7 +326,7 @@ export function useCookieConsent(props: Props) {
           if (tables.length > 1) {
             height -= 4 * (tables.length - 1)
           }
-          // @ts-ignore
+
           for (const table of tables) {
             height += table.offsetHeight + 7
           }
@@ -322,6 +341,8 @@ export function useCookieConsent(props: Props) {
   function toggleConsent(event: Event, categoryIndex: number, cookieIndex?: number) {
     // @ts-ignore
     const added = event.target.classList.toggle('active')
+
+    if (categoryIndex === 0) return
 
     // when no cookie index is available, a category was toggled
     if (!cookieIndex && cookieIndex !== 0) {
@@ -348,33 +369,25 @@ export function useCookieConsent(props: Props) {
     // when the return value from toggling is false, then also deactivate the category
     if (!added) {
       const binarySliders = cookieDetailsCard.querySelectorAll('.table-container .binary-slider')
-
-      // Ist die Rückgabe vom anfänglichen Umschalten false, dann prüfen ob alle anderen Schalter deaktiviert sind
       const res = []
-      // @ts-ignore
+
       for (const slider of binarySliders) {
         res.push(slider.classList.contains('active'))
       }
 
-      // Sind alle anderen Cookies deaktiviert, dann auch die Kategorie deaktivieren
       unref(consents)[categoryIndex].partial = res.includes(true)
-
       unref(consents)[categoryIndex].accepted = false
       unref(consents)[categoryIndex].cookies[cookieIndex].accepted = false
 
     } else {
       const binarySliders = cookieDetailsCard.querySelectorAll('.table-container .binary-slider')
-
       unref(consents)[categoryIndex].cookies[cookieIndex].accepted = true
-
-      // Ist die Rückgabe vom anfänglichen Umschalten true, dann prüfen, ob alle anderen Schalter aktiviert sind.
       const res = []
-      // @ts-ignore
+
       for (const slider of binarySliders) {
         res.push(slider.classList.contains('active'))
       }
 
-      // Sind alle anderen Cookies aktiviert, dann auch die Kategorie aktivieren
       if (!res.includes(false)) {
         unref(consents)[categoryIndex].partial = false
         unref(consents)[categoryIndex].accepted = true
@@ -385,8 +398,8 @@ export function useCookieConsent(props: Props) {
   }
 
   function clearSite(event: Event) {
-    event.preventDefault()
-    window.Consents.clear()
+    event?.preventDefault()
+    clearConsents(props, consents)
   }
 
   function toggleInfo() {
@@ -411,7 +424,7 @@ export function useCookieConsent(props: Props) {
   }
 
 
-// lifecycle hooks
+  // lifecycle hooks
   onBeforeMount(() => {
     // @ts-ignore
     Consents(unref(metaCookie), props, consents)

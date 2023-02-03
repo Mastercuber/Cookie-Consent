@@ -34,12 +34,13 @@ export interface Props {
     requiredLinks: RequiredLinksProps,
     links?: Array<Link>,
     useMetaCookie?: boolean,
+    attachGlobal?: boolean,
 
     animationDuration?: string,
     minimizeAnimationDuration?: string,
     hideDuration?: string,
     storagePrefix?: string,
-    storageConsentsKey?: string,
+    storageKey?: string,
     maskContent?: boolean,
     maskColor?: string
 }

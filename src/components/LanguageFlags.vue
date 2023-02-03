@@ -180,7 +180,7 @@ const langs = [
 function setLang(l = 'en', reset = false) {
   console.log(reset)
   if (reset) {
-    Consents.clear()
+    window.Consents.clear()
     location.reload()
   }
 
@@ -214,7 +214,7 @@ function setLang(l = 'en', reset = false) {
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0 4px 0px;
+    padding: 0 4px 0;
   }
 
   .language-indicator-container {
@@ -223,6 +223,10 @@ function setLang(l = 'en', reset = false) {
     overflow-x: hidden;
     z-index: 2;
     width: 30vw;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    margin-top: 16px;
   }
 
   .language-indicator {
