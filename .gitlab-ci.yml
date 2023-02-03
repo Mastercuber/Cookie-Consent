@@ -24,7 +24,7 @@ cache:
   key: cookie-consent-node_modules
   when: always
   paths:
-    - node_modules
+    - node_modules/
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -36,7 +36,7 @@ build-job:       # This job runs in the build stage, which runs first.
     - npm install --force
     - npm run build:lib
 
-lint-job:   # This job runs in the test stage.
+lint-job:        # This job runs in the test stage.
   stage: test    # It can run at the same time as unit-test-job (in parallel).
   script:
     - npm run lint
@@ -44,33 +44,59 @@ lint-job:   # This job runs in the test stage.
     - job: build-job
       artifacts: false
 
-unit-test-job:   # This job also runs in the test stage.
+test-job:        # This job also runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
   script:
-    - npm test
+    - npm run test:ci
   needs:
     - job: build-job
       artifacts: false
+  artifacts:
+    when: always
+    paths:
+      - JUnit.xml
+      - coverage/
+    reports:
+      junit: JUnit.xml
 
-deploy-sonatype-oss-job:      # This job runs in the deployment stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+deploy-sonatype-oss-job:  # This job runs in the deployment stage.
+  stage: deploy           # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - npm config set //repo.avensio.de/repository/npm-hosted/:_auth $NPM_AUTH
     - npm publish
   needs:
     - job: lint-job
-    - job: unit-test-job
+    - job: test-job
     - job: build-job
       artifacts: true
+  only:
+    - master
 
-deploy-npmjs-job:      # This job runs in the deployment stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+deploy-npmjs-job:  # This job runs in the deployment stage.
+  stage: deploy    # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - npm config set //registry.npmjs.org/:_authToken $NPMJS_AUTH_TOKEN
     - sed -e s#https://repo.avensio.de/repository/npm-hosted/#https://registry.npmjs.org# -i package.json
     - npm publish
   needs:
     - job: lint-job
-    - job: unit-test-job
+    - job: test-job
     - job: build-job
       artifacts: true
+  only:
+    - master
+
+pages:
+  stage: deploy
+  script:
+    - mkdir public
+    - ls coverage/
+    - mv coverage/* public/
+  artifacts:
+    paths:
+      - public
+  needs:
+    - job: test-job
+      artifacts: true
+  only:
+    - master
