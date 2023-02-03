@@ -17,8 +17,9 @@ export default defineConfig({
     }
   },
   build: {
-    target: 'esnext',
+    target: 'ES2015',
     lib: {
+      name: 'CookieConsent',
       entry: resolve(__dirname, 'index.html'),
       formats: ['es']
     },
