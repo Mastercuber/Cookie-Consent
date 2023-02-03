@@ -52,10 +52,22 @@ unit-test-job:   # This job also runs in the test stage.
     - job: build-job
       artifacts: false
 
-deploy-job:      # This job runs in the deployment stage.
+deploy-sonatype-oss-job:      # This job runs in the deployment stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - npm config set //repo.avensio.de/repository/npm-hosted/:_auth $NPM_AUTH
+    - npm publish
+  needs:
+    - job: lint-job
+    - job: unit-test-job
+    - job: build-job
+      artifacts: true
+
+deploy-npmjs-job:      # This job runs in the deployment stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  script:
+    - npm config set //registry.npmjs.org/:_authToken $NPMJS_AUTH_TOKEN
+    - sed -e s#https://repo.avensio.de/repository/npm-hosted/#https://registry.npmjs.org# -i package.json
     - npm publish
   needs:
     - job: lint-job
