@@ -20,11 +20,11 @@ const obj = {
   requiredLinks: {
     privacy: {
       title: 'Datenschutz',
-      href: '/datenschutz'
+      href: '/datenschutz2'
     },
     impress: {
       title: 'Impressum',
-      href: '/impressum'
+      href: '/impressum2'
     }
   },
   categories: [
@@ -77,8 +77,10 @@ const obj = {
             }
           ],
           onAccepted() {
+            console.log('accepted')
           },
           onDenied() {
+            console.log('denied')
           }
         }
       ]

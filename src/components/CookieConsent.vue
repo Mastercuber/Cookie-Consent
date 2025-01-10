@@ -133,15 +133,15 @@
               ><b>{{ t('generalLabels.cookieDetails') }}</b></a>
               <a
                   rel="nofollow"
-                  :href="t('generalLabels.requiredLinks.privacy.href')"
+                  :href="props.requiredLinks?.privacy?.href || t('generalLabels.requiredLinks.privacy.href')"
               ><b>{{
-                  t('generalLabels.requiredLinks.privacy.title')
+                  props.requiredLinks?.privacy?.title || t('generalLabels.requiredLinks.privacy.title')
                 }}</b></a>
               <a
                   rel="nofollow"
-                  :href="t('generalLabels.requiredLinks.impress.href')"
+                  :href="props.requiredLinks?.impress?.href || t('generalLabels.requiredLinks.impress.href')"
               ><b>{{
-                  t('generalLabels.requiredLinks.impress.title')
+                  props.requiredLinks?.impress?.title || t('generalLabels.requiredLinks.impress.title')
                 }}</b></a>
               <a
                   v-for="link in links"
@@ -257,112 +257,116 @@
                     v-for="(cookie, cookieIndex) in category.cookies"
                     :key="cookie.cookieName"
                 >
-                  <tr v-if="categoryIndex > 0">
-                    <td>{{ t('cookieLabels.accept') }}</td>
-                    <td>
-                      <div class="table-binary-slider-container">
-                        <div
-                            class="binary-slider"
-                            :class="{ 'active': consents[categoryIndex].cookies[cookieIndex].accepted }"
-                            @click="toggleConsent($event, categoryIndex, cookieIndex)"
-                        >
-                          <span class="binary-slider-circle"/>
+                  <thead>
+                    <tr v-if="categoryIndex > 0">
+                      <th>{{ t('cookieLabels.accept') }}</th>
+                      <th>
+                        <div class="table-binary-slider-container">
+                          <div
+                              class="binary-slider"
+                              :class="{ 'active': consents[categoryIndex].cookies[cookieIndex].accepted }"
+                              @click="toggleConsent($event, categoryIndex, cookieIndex)"
+                          >
+                            <span class="binary-slider-circle"/>
+                          </div>
+                          <div
+                              class="select-none mt-0 ml-2 rtl:mr-2 rtl:-mt-[8px]"
+                              :class="{ '!hidden': !consents[categoryIndex].cookies[cookieIndex].accepted }"
+                          >
+                            {{ t('generalLabels.binarySliderLabels.accepted') }}
+                          </div>
+                          <div
+                              class="select-none mt-0 ml-2 rtl:mr-2 rtl:-mt-[8px]"
+                              :class="{ '!hidden': consents[categoryIndex].cookies[cookieIndex].accepted }"
+                          >
+                            {{ t('generalLabels.binarySliderLabels.declined') }}
+                          </div>
                         </div>
-                        <div
-                            class="select-none mt-0 ml-2 rtl:mr-2 rtl:-mt-[8px]"
-                            :class="{ '!hidden': !consents[categoryIndex].cookies[cookieIndex].accepted }"
-                        >
-                          {{ t('generalLabels.binarySliderLabels.accepted') }}
-                        </div>
-                        <div
-                            class="select-none mt-0 ml-2 rtl:mr-2 rtl:-mt-[8px]"
-                            :class="{ '!hidden': consents[categoryIndex].cookies[cookieIndex].accepted }"
-                        >
-                          {{ t('generalLabels.binarySliderLabels.declined') }}
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ t('cookieLabels.name') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
-                      {{ t('metaCookieTitles.name') }}
-                    </td>
-                    <td v-else>
-                      {{ cookie.name }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ t('cookieLabels.provider') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
-                      {{ t('metaCookieTitles.provider') }}
-                    </td>
-                    <td v-else>
-                      {{ cookie.provider }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ t('cookieLabels.purpose') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
-                      {{ t('metaCookieTitles.purpose') }}
-                    </td>
-                    <td
-                        v-else
-                        style="white-space: pre-line"
-                    >
-                      {{ cookie.purpose }}
-                    </td>
-                  </tr>
-                  <tr v-if="'privacyURL' in cookie">
-                    <td>{{ t('cookieLabels.privacy') }}</td>
-                    <td>
-                      <a
-                          rel="nofollow"
-                          :href="cookie.privacyURL"
-                      >{{ cookie.privacyURL }}</a>
-                    </td>
-                  </tr>
-                  <tr v-if="'hosts' in cookie">
-                    <td>{{ t('cookieLabels.hosts') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
-                      {{ t('metaCookieTitles.hosts') }}
-                    </td>
-                    <td v-else>
-                      {{ cookie.hosts }}
-                    </td>
-                  </tr>
-                  <tr v-if="'cookieName' in cookie">
-                    <td>{{ t('cookieLabels.cookieName') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
-                      consents
-                    </td>
-                    <td v-else>
-                      <i>{{ cookie.cookieName }}</i>
-                    </td>
-                  </tr>
-                  <tr v-if="'cookieValidityPeriod' in cookie">
-                    <td>{{ t('cookieLabels.cookieValidityPeriod') }}</td>
-                    <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
-                      {{
-                        t('metaCookieTitles.cookieValidityPeriod')
-                      }}
-                    </td>
-                    <td v-else>
-                      {{ cookie.cookieValidityPeriod }}
-                    </td>
-                  </tr>
-                  <tr v-if="'links' in cookie && cookie.links && cookie.links.length > 0">
-                    <td>{{ t('cookieLabels.links') }}</td>
-                    <td>
-                      <a
-                          v-for="link in cookie.links"
-                          :key="link.title"
-                          rel="nofollow"
-                          :href="link.href"
-                          target="_blank"
-                      >{{ link.title || link.href }}</a>
-                    </td>
-                  </tr>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{ t('cookieLabels.name') }}</td>
+                      <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
+                        {{ t('metaCookieTitles.name') }}
+                      </td>
+                      <td v-else>
+                        {{ cookie.name }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>{{ t('cookieLabels.provider') }}</td>
+                      <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
+                        {{ t('metaCookieTitles.provider') }}
+                      </td>
+                      <td v-else>
+                        {{ cookie.provider }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>{{ t('cookieLabels.purpose') }}</td>
+                      <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
+                        {{ t('metaCookieTitles.purpose') }}
+                      </td>
+                      <td
+                          v-else
+                          style="white-space: pre-line"
+                      >
+                        {{ cookie.purpose }}
+                      </td>
+                    </tr>
+                    <tr v-if="'privacyURL' in cookie">
+                      <td>{{ t('cookieLabels.privacy') }}</td>
+                      <td>
+                        <a
+                            rel="nofollow"
+                            :href="cookie.privacyURL"
+                        >{{ cookie.privacyURL }}</a>
+                      </td>
+                    </tr>
+                    <tr v-if="'hosts' in cookie">
+                      <td>{{ t('cookieLabels.hosts') }}</td>
+                      <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
+                        {{ t('metaCookieTitles.hosts') }}
+                      </td>
+                      <td v-else>
+                        {{ cookie.hosts }}
+                      </td>
+                    </tr>
+                    <tr v-if="'cookieName' in cookie">
+                      <td>{{ t('cookieLabels.cookieName') }}</td>
+                      <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
+                        consents
+                      </td>
+                      <td v-else>
+                        <i>{{ cookie.cookieName }}</i>
+                      </td>
+                    </tr>
+                    <tr v-if="'cookieValidityPeriod' in cookie">
+                      <td>{{ t('cookieLabels.cookieValidityPeriod') }}</td>
+                      <td v-if="categoryIndex === 0 && cookieIndex === 0 && useMetaCookie">
+                        {{
+                          t('metaCookieTitles.cookieValidityPeriod')
+                        }}
+                      </td>
+                      <td v-else>
+                        {{ cookie.cookieValidityPeriod }}
+                      </td>
+                    </tr>
+                    <tr v-if="'links' in cookie && cookie.links && cookie.links.length > 0">
+                      <td>{{ t('cookieLabels.links') }}</td>
+                      <td>
+                        <a
+                            v-for="link in cookie.links"
+                            :key="link.title"
+                            rel="nofollow"
+                            :href="link.href"
+                            target="_blank"
+                        >{{ link.title || link.href }}</a>
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
@@ -376,10 +380,10 @@
 <script setup lang="ts">
 import {useCookieConsent} from "./CookieConsentComposable"
 import {useI18n} from "vue-i18n";
-import {withDefaults} from "vue";
 import type { Props } from '../interfaces/CookieConsentProps'
 
-const {t, locale} = useI18n({})
+const isBrowser = typeof window !== 'undefined'
+
 
 // Props
 const props = withDefaults(defineProps<Props>(), {
@@ -419,6 +423,8 @@ const {
   consents,
   detailsCards
 } = useCookieConsent(props)
+
+const {t, locale} = useI18n({})
 
 </script>
 

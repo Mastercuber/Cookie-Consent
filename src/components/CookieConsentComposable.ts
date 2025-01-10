@@ -80,6 +80,22 @@ export function useCookieConsent(props: Props) {
     cookieValidityPeriod: t('metaCookieTitles.cookieValidityPeriod'),
   })
 
+  // lifecycle hooks
+  onBeforeMount(() => {
+    // @ts-ignore
+    Consents(unref(metaCookie), props, consents)
+
+    document.documentElement.style.setProperty('--cookie-consent-animation-duration', props.animationDuration || '0.7s')
+    document.documentElement.style.setProperty('--cookie-consent-minimize-animation-duration', props.minimizeAnimationDuration || '1s')
+    document.documentElement.style.setProperty('--cookie-consent-hide-duration', props.hideDuration || '1s')
+
+
+    watchEffect(() => {
+      const cc = unref(locale)?.substring(0, 2)
+      loadTranslation(cc);
+    })
+  })
+
   if (MINIMIZED_KEY in localStorage) showConsent.value = false
   else if (!(props.storageKey in localStorage)) showConsent.value = true
 
@@ -422,26 +438,6 @@ export function useCookieConsent(props: Props) {
       })
     }
   }
-
-
-  // lifecycle hooks
-  onBeforeMount(() => {
-    // @ts-ignore
-    Consents(unref(metaCookie), props, consents)
-
-    document.documentElement.style.setProperty('--cookie-consent-animation-duration', props.animationDuration || '0.7s')
-    document.documentElement.style.setProperty('--cookie-consent-minimize-animation-duration', props.minimizeAnimationDuration || '1s')
-    document.documentElement.style.setProperty('--cookie-consent-hide-duration', props.hideDuration || '1s')
-
-
-    watchEffect(() => {
-      const cc = unref(locale)?.substring(0, 2)
-      loadTranslation(cc);
-    })
-  })
-
-  onMounted(() => {
-  })
 
   return {
     consents,

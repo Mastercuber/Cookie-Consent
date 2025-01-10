@@ -12,7 +12,7 @@ const i18n = createI18n({
 
 const handler = {
   has(target, p) {
-    return p in target._store
+    return p in target
   }
 }
 localStorage = new Proxy(localStorage, handler as ProxyHandler<Storage>)

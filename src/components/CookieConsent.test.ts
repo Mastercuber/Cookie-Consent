@@ -24,7 +24,7 @@ let wrapper: VueWrapper
 
 const handler = {
   has(target, p) {
-    return p in target._store
+    return p in target
   }
 }
 localStorage = new Proxy(localStorage, handler as ProxyHandler<Storage>)

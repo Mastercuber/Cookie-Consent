@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import VueTypeImports from 'vite-plugin-vue-type-imports'
 import dts from 'vite-plugin-dts'
 
 import { resolve } from 'pathe'
@@ -21,7 +20,6 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    VueTypeImports(),
     dts()
   ],
   resolve: {
